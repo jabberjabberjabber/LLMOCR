@@ -40,18 +40,18 @@ def main():
 
     llm_processor = LLMProcessor(args.api_url, args.api_password)
 
-        
-    if args.image_path.endswith(".jpg") or args.image_path.endswith(".png"):
+    image_path = args.image_path.lower()    
+    if image_path.endswith(".jpg") or image_path.endswith(".png"):
         base64_image = encode_file_to_base64(args.image_path)
     
-    if base64_image:
-        print(f"Processing image.")
-        result = llm_processor.send_image_to_llm(base64_image)
-        if result:
-            print("LLM Response:")
-            print(result)
-        else:
-            print(f"Failed to get a response from the LLM.")
+        if base64_image:
+            print(f"Processing image.")
+            result = llm_processor.send_image_to_llm(base64_image)
+            if result:
+                print("LLM Response:")
+                print(result)
+            else:
+                print(f"Failed to get a response from the LLM.")
     else:
         print("Failed to process the image.")
 
