@@ -24,7 +24,7 @@ call venv\Scripts\activate.bat
 :: Install required packages
 echo Installing Python packages...
 python -m pip install --upgrade pip
-pip install PyQt6 requests
+pip install -r requirements.txt
 
 REM Launch your Python script
 Echo Wait for Koboldcpp to load in another window before operating script!
