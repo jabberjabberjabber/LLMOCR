@@ -33,12 +33,13 @@ class LLMProcessor:
         payload = {
             "prompt": prompt,
             "max_context": 4096,
+            "max_length": 1024,
             "images": [base64_image],
             "top_p": 1,
             "top_k": 0,
             "temp": 0,
-            "rep_pen": 1,
-            "min_p": 0,
+            "rep_pen": 1.05,
+            "min_p": 0.2,
         }
         try:
             response = requests.post(
@@ -60,7 +61,7 @@ class LLMProcessor:
             result = self.encode_file_to_base64(file_path)
             if result:
                 result = self.send_image_to_llm(result)
-            output_path = os.path.splitext(file_path)[0] + ".md"
+            output_path = os.path.splitext(file_path)[0] + ".txt"
             return result, output_path
         else:
             return None, ""
