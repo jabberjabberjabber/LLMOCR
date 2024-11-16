@@ -29,7 +29,7 @@ LLMOCR uses a local LLM to read text from images.
 
 3. Download [KoboldCPP.exe](https://github.com/LostRuins/koboldcpp/releases) and place it in the LLMOCR folder. If it is not named KoboldCPP.exe, rename it to KoboldCPP.exe 
 
-4. Run `llm-ocr.bat` It will create a python environment and download the model weights. The download is quite large (6GB) and there is no progress bar, but it only needs to do this once. Once it is done KoboldCPP will start and one of the terminal windows will say ```Please connect to custom endpoint at http://localhost:5001``` and then it is ready.
+4. Run `llm_ocr.bat` It will create a python environment and download the model weights. The download is quite large (6GB) and there is no progress bar, but it only needs to do this once. Once it is done KoboldCPP will start and one of the terminal windows will say ```Please connect to custom endpoint at http://localhost:5001``` and then it is ready.
 
 
 ### Mac and Linux Installation
