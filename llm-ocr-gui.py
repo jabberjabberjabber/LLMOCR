@@ -39,7 +39,7 @@ class LLMProcessor:
             "top_k": 0,
             "temp": 0,
             "rep_pen": 1.05,
-            "min_p": 0.2,
+            "min_p": 0.02,
         }
         try:
             response = requests.post(
