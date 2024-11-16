@@ -42,7 +42,7 @@ LLMOCR uses a local LLM to read text from images.
 
 4. Run kobold with flag --config llm-ocr.kcppt
    
-5. Wait until the model weights finish download and the terminal window says ```Please connect to custom endpoint at http://localhost:5001```
+5. Wait until the model weights finish downloading and the terminal window says ```Please connect to custom endpoint at http://localhost:5001```
 
 6. Run llm-ocr-gui.py using Python.
 
@@ -53,7 +53,5 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## Acknowledgements
 
-- [ExifTool](https://exiftool.org/) for metadata manipulation
 - [KoboldCPP](https://github.com/LostRuins/koboldcpp) for local AI processing
 - [PyQt6](https://www.riverbankcomputing.com/software/pyqt/) for the GUI framework
-- [Fix Busted JSON](https://github.com/Qarj/fix-busted-json) and [Repair-Json]( for help with mangled JSON parsing
