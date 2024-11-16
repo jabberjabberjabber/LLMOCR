@@ -9,7 +9,7 @@ LLMOCR uses a local LLM to read text from images.
 ## Features
  
 - **Local Processing**: All processing is done locally on your machine.
-- **User-Friendly GUI**: Includes a GUI and installer. Relies on Koboldcpp, a single executable, for all AI functionality.  
+- **User-Friendly GUI**: Includes a GUI. Relies on Koboldcpp, a single executable, for all AI functionality.  
 - **GPU Acceleration**: Will use Apple Metal, Nvidia CUDA, or AMD (Vulkan) hardware if available to greatly speed inference.
 - **Cross-Platform**: Supports Windows, macOS ARM, and Linux.
 
