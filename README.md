@@ -42,9 +42,10 @@ LLMOCR uses a local LLM to read text from images.
 
 4. Run kobold with flag --config llm-ocr.kcppt
    
-5. Run llm-ocr-gui.py using Python.
+5. Wait until the model weights finish download and the terminal window says ```Please connect to custom endpoint at http://localhost:5001```
 
-For all platforms, the script will set up the Python environment, install dependencies, and download necessary model weights (6GB total). This initial setup is performed only once and will take a few minutes depending on your download speed.
+6. Run llm-ocr-gui.py using Python.
+
 
 ## License
 
