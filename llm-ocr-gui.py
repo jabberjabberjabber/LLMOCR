@@ -3,7 +3,6 @@ import base64
 import requests
 import os
 import io
-from PIL import Image
 from typing import Optional, List
 from PyQt6.QtWidgets import (
     QApplication, QMainWindow, QWidget, QVBoxLayout, QPushButton, 
