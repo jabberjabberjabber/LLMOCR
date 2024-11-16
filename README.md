@@ -4,7 +4,9 @@
 
 LLMOCR uses a local LLM to read text from images.
 
-![Screenshot](capture.gif)
+You can also change the instruction to have the LLM use the image in the way that you prompt.
+
+![Screenshot](llmocr.png)
 
 ## Features
  
