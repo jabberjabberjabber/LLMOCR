@@ -1,6 +1,4 @@
 import sys
-import base64
-import requests
 import os
 import io
 from typing import Optional, List
@@ -9,70 +7,39 @@ from PyQt6.QtWidgets import (
     QLineEdit, QLabel, QFileDialog, QProgressBar, QTextEdit
 )
 from PyQt6.QtCore import Qt, QThread, pyqtSignal
+from koboldapi import KoboldAPICore, ImageProcessor
 
 class LLMProcessor:
-    def __init__(self, api_url: str, api_password: str, instruction: str):
-        self.api_url = api_url
+    def __init__(self, api_url, api_password, instruction):
         self.instruction = instruction
-        self.headers = {
-            "Content-Type": "application/json",
-            "Authorization": f"Bearer {api_password}",
-        }
-
-    def encode_file_to_base64(self, file_path: str) -> Optional[str]:
-        try:
-            with open(file_path, "rb") as image_file:
-                return base64.b64encode(image_file.read()).decode("utf-8")
-        except Exception as e:
-            print(f"Error encoding file {file_path}: {e}")
-            return None
-
-    def send_image_to_llm(self, base64_image: str) -> Optional[str]:
-        prompt = f"<|im_start|>user\n{self.instruction}<|im_end|>\n<|im_start|>assistant\n"
-        payload = {
-            "prompt": prompt,
+        config_dict = {
             "max_context": 4096,
             "max_length": 1024,
-            "images": [base64_image],
             "top_p": 1,
             "top_k": 0,
             "temp": 0,
             "rep_pen": 1.05,
             "min_p": 0.02,
         }
-        try:
-            response = requests.post(
-                f"{self.api_url}/api/v1/generate", 
-                json=payload, 
-                headers=self.headers
-            )
-            response.raise_for_status()
-            return response.json()["results"][0].get("text")
-        except Exception as e:
-            print(f"Error in LLM request: {e}")
-            return None
-
+        self.core = KoboldAPICore(api_url, api_password, config_dict)
+        self.image_processor = ImageProcessor(max_dimension=1024)
+        
     def process_file(self, file_path: str) -> tuple[Optional[str], str]:
         """Process an image file and return (result, output_path)"""
-        file_ext = os.path.splitext(file_path)[1].lower()
+        encoded_image, output_path = self.image_processor.process_image(str(file_path))
+        result = self.core.wrap_and_generate(instruction=self.instruction, 
+            images=[encoded_image])
+        return result, output_path
         
-        if file_ext in ('.png', '.jpg', '.jpeg'):
-            result = self.encode_file_to_base64(file_path)
-            if result:
-                result = self.send_image_to_llm(result)
-            output_path = os.path.splitext(file_path)[0] + ".txt"
-            return result, output_path
-        else:
-            return None, ""
-
     def save_result(self, result: str, output_path: str) -> bool:
         """Save the processing result to a file"""
+        txt_output_path = os.path.splitext(output_path)[0] + ".txt"
         try:
-            with open(output_path, "w", encoding="utf-8") as output_file:
+            with open(txt_output_path, "w", encoding="utf-8") as output_file:
                 output_file.write(result)
             return True
         except Exception as e:
-            print(f"Error saving to {output_path}: {e}")
+            print(f"Error saving to {txt_output_path}: {e}")
             return False
 
 class ProcessingThread(QThread):
@@ -152,7 +119,7 @@ class MainWindow(QMainWindow):
             self,
             "Select Images",
             "",
-            "Image Files (*.png *.jpg *.jpeg)"
+            "*"
         )
         if files:
             self.selected_files = files
