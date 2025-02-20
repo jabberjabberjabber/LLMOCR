@@ -31,7 +31,7 @@ You can also change the instruction to have the LLM use the image in the way tha
 
 3. Download [KoboldCPP.exe](https://github.com/LostRuins/koboldcpp/releases) and place it in the LLMOCR folder. If it is not named KoboldCPP.exe, rename it to KoboldCPP.exe 
 
-4. If you want the script to download a model for you and have KoboldCpp run it for you, open `llm_ocr.bat` It will create a python environment and download the model weights. The download is quite large (6GB) and there is no progress bar, but it only needs to do this once. Once it is done KoboldCPP will start and one of the terminal windows will say ```Please connect to custom endpoint at http://localhost:5001``` and then it is ready.
+4. If you want the script to download a model for you and have KoboldCpp run it for you, open `llm_ocr.bat` 
 
 5. If you want to load your own model using KoboldCpp, open ``llm_ocr_no_kobold.bat``
 
