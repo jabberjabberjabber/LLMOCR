@@ -57,6 +57,7 @@ class ProcessingThread(QThread):
             for i, file_path in enumerate(self.files):
                 result, output_path = self.processor.process_file(file_path)
                 if result:
+                    print(f"{result}")
                     self.processor.save_result(result, output_path)
                 self.progress.emit(i + 1, len(self.files))
             self.finished.emit()
