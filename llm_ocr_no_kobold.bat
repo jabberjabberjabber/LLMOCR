@@ -28,8 +28,9 @@ pip install -r requirements.txt
 
 @echo off
 setlocal enabledelayedexpansion
-
-Results will appear here...
+echo ---------------------------
+echo Results will appear here...
+echo ---------------------------
 
 python llm-ocr-gui.py
 
