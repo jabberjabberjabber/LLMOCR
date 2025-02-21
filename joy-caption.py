@@ -13,23 +13,24 @@ class LLMProcessor:
     def __init__(self, api_url, system_instruction, instruction):
         self.instruction = instruction
         self.system_instruction = system_instruction
-        config_dict = {
-            "max_context": 4096,
-            "max_length": 1024,
-            "top_p": 0.95,
-            "top_k": 100,
-            "temp": 0.6,
-            "rep_pen": 1,
-            "min_p": 0,
-        }
-        self.core = KoboldAPICore(api_url, config_dict)
-        self.image_processor = ImageProcessor(max_dimension=440)
+        self.core = KoboldAPICore(api_url=api_url)
+        self.image_processor = ImageProcessor(max_dimension=384)
         
     def process_file(self, file_path: str) -> tuple[Optional[str], str]:
         """Process an image file and return (result, output_path)"""
         encoded_image, output_path = self.image_processor.process_image(str(file_path))
-        result = self.core.wrap_and_generate(instruction=self.instruction, system_instruction=self.system_instruction, images=[encoded_image])
-        print(f"Output: {result}\n------------\n")
+        result = self.core.wrap_and_generate(
+            instruction=self.instruction, 
+            system_instruction=self.system_instruction, 
+            images=[encoded_image],
+            max_length=512,
+            top_p=0.95,
+            top_k=0,
+            temp=0.6,
+            rep_pen=1.1,
+            min_p=0.1
+        )
+        print(f"Output: {result}\n\n------------\n")
         return result, output_path
         
     def save_result(self, result: str, output_path: str) -> bool:
@@ -81,12 +82,12 @@ class MainWindow(QMainWindow):
         layout.addWidget(self.api_url)
         
         layout.addWidget(QLabel("System Instruction:"))
-        self.system_instruction = QLineEdit("You are a vision capable LLM.")
+        self.system_instruction = QLineEdit("You are a helpful image captioner.")
         layout.addWidget(self.system_instruction)
         
         # Instruction
         layout.addWidget(QLabel("Instruction:"))
-        self.instruction = QLineEdit("Describe the image in detail. be specific.")
+        self.instruction = QLineEdit("Write a long descriptive caption for this image in a formal tone.")
         layout.addWidget(self.instruction)
         
         # File selection
