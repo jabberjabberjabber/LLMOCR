@@ -21,7 +21,8 @@ class LLMProcessor:
         encoded_image, output_path = self.image_processor.process_image(str(file_path))
         result = self.core.wrap_and_generate(
             instruction=self.instruction, 
-            system_instruction=self.system_instruction, 
+            system_instruction=self.system_instruction,
+            model_name="llama3",
             images=[encoded_image],
             max_length=512,
             top_p=0.95,
