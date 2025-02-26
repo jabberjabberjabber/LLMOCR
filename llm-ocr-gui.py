@@ -17,11 +17,11 @@ class LLMProcessor:
             "max_length": 1024,
             "top_p": 1,
             "top_k": 0,
-            "temp": 0,
+            "temp": 0.1,
             "rep_pen": 1.05,
             "min_p": 0.02,
         }
-        self.core = KoboldAPICore(api_url, api_password, config_dict)
+        self.core = KoboldAPICore(api_url, api_password, **config_dict)
         self.image_processor = ImageProcessor(max_dimension=1024)
         
     def process_file(self, file_path: str) -> tuple[Optional[str], str]:
