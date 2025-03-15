@@ -7,29 +7,86 @@ from PyQt6.QtWidgets import (
     QLineEdit, QLabel, QFileDialog, QProgressBar, QTextEdit
 )
 from PyQt6.QtCore import Qt, QThread, pyqtSignal
-from koboldapi import KoboldAPICore, ImageProcessor
+from koboldapi import ImageProcessor
+import requests
 
 class LLMProcessor:
     def __init__(self, api_url, api_password, instruction):
         self.instruction = instruction
-        config_dict = {
-            "max_context": 4096,
-            "max_length": 1024,
-            "top_p": 1,
-            "top_k": 0,
-            "temp": 0.1,
-            "rep_pen": 1.05,
-            "min_p": 0.02,
-        }
-        self.core = KoboldAPICore(api_url, api_password, **config_dict)
-        self.image_processor = ImageProcessor(max_dimension=1024)
+        self.max_length = 1024
+        self.top_p = 1
+        self.top_k = 0
+        self.temperature = 0.1
+        self.rep_pen = 1
+        self.min_p = 0.05
+        self.api_url = api_url
+        self.api_password = api_password
+        self.image_processor = ImageProcessor(max_dimension=896)
+        self.system_instruction = "You are a helpful image capable model"
         
-    def process_file(self, file_path: str) -> tuple[Optional[str], str]:
-        """Process an image file and return (result, output_path)"""
-        encoded_image, output_path = self.image_processor.process_image(str(file_path))
-        result = self.core.wrap_and_generate(instruction=self.instruction, 
-            images=[encoded_image])
-        return result, output_path
+    def process_file(self, file_path):
+        """Send frames to API for analysis"""
+        image, output_path = self.image_processor.process_image(str(file_path))
+        user_content = [{"type": "text", "text": self.instruction}]    
+        if image:
+            user_content.append({
+                "type": "image_url",
+                "image_url": {
+                    "url": f"data:image/jpeg;base64,{image}"
+                }
+            })    
+        try:
+            messages = [
+                {"role": "system", "content": self.system_instruction},
+                {
+                    "role": "user", 
+                    "content": user_content 
+                }
+            ]
+            
+            payload = {
+                #"model": "gpt-4-vision-preview", 
+                "messages": messages,
+                "max_tokens": self.max_length,
+                "temperature": self.temperature,
+                "top_p": self.top_p,
+                "top_k": self.top_k,
+                "rep_pen": self.rep_pen,
+                "min_p": self.min_p
+            }
+            
+            endpoint = f"{self.api_url}/v1/chat/completions"
+            
+            headers = {
+                "Content-Type": "application/json"
+            }
+            
+            if self.api_password:
+                headers["Authorization"] = f"Bearer {self.api_password}"
+            
+            response = requests.post(  # Fixed from self.requests
+                endpoint,
+                json=payload,
+                headers=headers
+            )
+            
+            response.raise_for_status()
+            response_json = response.json()
+            
+            if "choices" in response_json and len(response_json["choices"]) > 0:
+                
+                if "message" in response_json["choices"][0]:
+                    
+                    return response_json["choices"][0]["message"]["content"], output_path
+                
+                else:
+                    
+                    return response_json["choices"][0].get("text", ""), output_path
+            
+            return None
+            
+        except Exception as e:
+            raise Exception(f"Error in API call: {str(e)}")        
         
     def save_result(self, result: str, output_path: str) -> bool:
         """Save the processing result to a file"""
