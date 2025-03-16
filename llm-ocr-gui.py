@@ -18,7 +18,7 @@ class LLMProcessor:
         self.top_k = 0
         self.temperature = 0.1
         self.rep_pen = 1
-        self.min_p = 0.05
+        self.min_p = 0.1
         self.api_url = api_url
         self.api_password = api_password
         self.image_processor = ImageProcessor(max_dimension=896)
@@ -64,7 +64,7 @@ class LLMProcessor:
             if self.api_password:
                 headers["Authorization"] = f"Bearer {self.api_password}"
             
-            response = requests.post(  # Fixed from self.requests
+            response = requests.post(
                 endpoint,
                 json=payload,
                 headers=headers
