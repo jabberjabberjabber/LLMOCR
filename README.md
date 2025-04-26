@@ -1,7 +1,5 @@
 # LLMOCR
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-
 LLMOCR uses a local LLM to read text from images.
 
 You can also change the instruction to have the LLM use the image in the way that you prompt.
@@ -15,46 +13,29 @@ You can also change the instruction to have the LLM use the image in the way tha
 - **GPU Acceleration**: Will use Apple Metal, Nvidia CUDA, or AMD (Vulkan) hardware if available to greatly speed inference.
 - **Cross-Platform**: Supports Windows, macOS ARM, and Linux.
 
-
-## Installation
-
 ### Prerequisites
 
 - Python 3.8 or higher
-- KoboldCPP
 
 ### Windows Installation
 
-1. Clone the repository or download the [ZIP file](https://github.com/jabberjabberjabber/LLavaImageTagger/archive/refs/heads/main.zip) and extract it.
+1. Clone the repository
 
-2. Install [Python for Windows](https://www.python.org/downloads/windows/).
+2. Install [Python for Windows](https://www.python.org/downloads/windows/)
 
-3. Download [KoboldCPP.exe](https://github.com/LostRuins/koboldcpp/releases) and place it in the LLMOCR folder. If it is not named KoboldCPP.exe, rename it to KoboldCPP.exe 
+3. Open KoboldCpp or an OpenAI compatible API and load a vision model
+ 
+4. Open `llmocr.bat` 
 
-4. If you want the script to download a model for you and have KoboldCpp run it for you, open `llm_ocr.bat` 
-
-5. If you want to load your own model using KoboldCpp, open ``llm_ocr_no_kobold.bat``
 
 ### Mac and Linux Installation
 
-1. Clone the repository or download and extract the ZIP file.
+1. Clone the repository or download and extract the ZIP file
 
-2. Install Python 3.8 or higher if not already installed.
+2. Install Python 3.8 or higher if not already installed
 
-3. Create a new python env and install the requirements.txt.
+3. Create a new python env and install the requirements.txt
 
-4. Run kobold with flag --config llm-ocr.kcppt
-   
-5. Wait until the model weights finish downloading and the terminal window says ```Please connect to custom endpoint at http://localhost:5001```
+4. Open KoboldCpp or an OpenAI compatible API with a loaded vision model
 
-6. Run llm-ocr-gui.py using Python.
-
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## Acknowledgements
-
-- [KoboldCPP](https://github.com/LostRuins/koboldcpp) for local AI processing
-- [PyQt6](https://www.riverbankcomputing.com/software/pyqt/) for the GUI framework
+5. Run llmocr.py using Python

@@ -1,1 +1,4 @@
 /venv
+/src/__pycache__
+*.gguf
+*.exe

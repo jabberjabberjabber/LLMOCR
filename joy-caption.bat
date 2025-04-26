@@ -25,7 +25,7 @@ call venv\Scripts\activate.bat
 echo Installing Python packages...
 python -m pip install --upgrade pip
 pip install -r requirements.txt
-
+start koboldcpp.exe --config joy-caption.kcppt
 @echo off
 setlocal enabledelayedexpansion
 cls
@@ -34,7 +34,7 @@ Echo Results will appear below
 Echo -------------------------
 Echo. 
 
-python joy-caption.py
+python ./src/joy-caption.py
 pause
 REM Deactivate the virtual environment
 deactivate

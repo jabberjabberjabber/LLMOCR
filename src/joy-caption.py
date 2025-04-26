@@ -9,7 +9,7 @@ from PyQt6.QtWidgets import (
     QLineEdit, QLabel, QFileDialog, QProgressBar, QTextEdit, QComboBox
 )
 from PyQt6.QtCore import Qt, QThread, pyqtSignal
-from koboldapi import KoboldAPICore, ImageProcessor
+from llmocr import LLMProcessor
 
 class ClipboardHandler:
     """Copies to clipboard across all platforms"""
@@ -24,44 +24,6 @@ class ClipboardHandler:
             return self._clipboard.text() == text
         except Exception as e:
             print(f"Error copying to clipboard: {str(e)}")
-            return False
-
-class LLMProcessor:
-    def __init__(self, api_url, system_instruction, instruction):
-        self.instruction = instruction
-        self.system_instruction = system_instruction
-        self.core = KoboldAPICore(api_url=api_url)
-        self.image_processor = ImageProcessor(max_dimension=384)
-        
-    def process_file(self, file_path: str) -> tuple[Optional[str], str]:
-        """Process an image file and return (result, output_path)"""
-        start_time = time.time()
-        encoded_image, output_path = self.image_processor.process_image(str(file_path))
-        result = self.core.wrap_and_generate(
-            instruction=self.instruction, 
-            system_instruction=self.system_instruction,
-            model_name="llama3",
-            images=[encoded_image],
-            max_length=256,
-            top_p=0.95,
-            top_k=0,
-            temp=0.6,
-            rep_pen=1.1,
-            min_p=0.1
-        )
-        total_time = time.time() - start_time
-        print(f"{os.path.basename(file_path)} processed in {total_time:.2f} seconds:\n------------\n{result}\n------------\n")
-        return result, output_path
-        
-    def save_result(self, result: str, output_path: str) -> bool:
-        """Save the processing result to a file"""
-        txt_output_path = os.path.splitext(output_path)[0] + ".txt"
-        try:
-            with open(txt_output_path, "w", encoding="utf-8") as output_file:
-                output_file.write(result)
-            return True
-        except Exception as e:
-            print(f"Error saving to {txt_output_path}: {e}")
             return False
 
 class ProcessingThread(QThread):
