@@ -1,2 +1,5 @@
 PyQt6
 requests
+pillow
+pillow_heif
+rawpy
