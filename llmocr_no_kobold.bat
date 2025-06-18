@@ -32,7 +32,7 @@ echo ---------------------------
 echo Results will appear here...
 echo ---------------------------
 
-python llm-ocr-gui.py
+python ./src/llmocr-gui.py
 
 pause
 REM Deactivate the virtual environment
